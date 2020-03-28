@@ -17,7 +17,11 @@ app.use(express.static("public"));
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
   useNewUrlParser: true,
   useFindAndModify: false
-});
+}).catch(error => {
+  if (error) console.error(error);
+  else console.log('mongo connected');
+})
+
 
 // routes
 app.use(require("./routes/api.js"));
