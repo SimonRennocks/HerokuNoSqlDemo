@@ -42,4 +42,3 @@ const API = {
     return json;
   },
 };
-© 2020 GitHub, Inc.
