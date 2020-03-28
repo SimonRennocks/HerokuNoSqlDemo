@@ -221,4 +221,3 @@ function workoutNames(data) {
   
   return workouts;
 }
-© 2020 GitHub, Inc.
