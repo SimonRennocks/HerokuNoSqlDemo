@@ -17,33 +17,22 @@ const newWorkout = document.querySelector(".new-workout")
 let workoutType = null;
 let shouldNavigateAway = false;
 
-init();
+async function initExercise() {
+  let workout;
 
-async function init() {
-  if (location.pathname.includes("/exercise") && location.search.split("=")[1] === undefined) {
-    console.log("excersise")
-    const newWorkout = await API.createWorkout();
-    const currentWorkout = await API.getLastWorkout();
-    if (currentWorkout) {
-      location.search = "?id=" + workout._id;
-    }
-    else {
-      newWorkout.classList.add("")
-    }
-    return console.log(newWorkout);
-  }
   if (location.search.split("=")[1] === undefined) {
-    const currentWorkout = await API.getLastWorkout();
-    if (currentWorkout) {
-      location.search = "?id=" + currentWorkout._id;
-    }
-    else {
-      newWorkout.classList.add("")
-    }
+    workout = await API.createWorkout()
+    console.log(workout)
   }
+  if (workout) {
+    location.search = "?id=" + workout._id;
+  }
+
 }
 
-function WorkoutTypeChange(event) {
+initExercise();
+
+function handleWorkoutTypeChange(event) {
   workoutType = event.target.value;
 
   if (workoutType === "cardio") {
@@ -57,10 +46,10 @@ function WorkoutTypeChange(event) {
     resistanceForm.classList.add("d-none");
   }
 
-  validateData();
+  validateInputs();
 }
 
-function validateData() {
+function validateInputs() {
   let isValid = true;
 
   if (workoutType === "resistance") {
@@ -106,7 +95,7 @@ function validateData() {
   }
 }
 
-async function formSubmit(event) {
+async function handleFormSubmit(event) {
   event.preventDefault();
 
   let workoutData = {};
@@ -130,7 +119,7 @@ async function formSubmit(event) {
   toast.classList.add("success");
 }
 
-function ToastAnimationEnd() {
+function handleToastAnimationEnd() {
   toast.removeAttribute("class");
   if (shouldNavigateAway) {
     location.href = "/";
@@ -149,18 +138,18 @@ function clearInputs() {
 }
 
 if (workoutTypeSelect) {
-  workoutTypeSelect.addEventListener("change", WorkoutTypeChange);
+  workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
 }
 if (completeButton) {
   completeButton.addEventListener("click", function (event) {
     shouldNavigateAway = true;
-    formSubmit(event);
+    handleFormSubmit(event);
   });
 }
 if (addButton) {
-  addButton.addEventListener("click", formSubmit);
+  addButton.addEventListener("click", handleFormSubmit);
 }
-toast.addEventListener("animationend", ToastAnimationEnd);
+toast.addEventListener("animationend", handleToastAnimationEnd);
 
 document
   .querySelectorAll("input")
